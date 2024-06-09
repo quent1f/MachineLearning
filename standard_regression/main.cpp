@@ -1,0 +1,21 @@
+#include "data_processing.h"
+#include "classification.h"
+
+
+int main() {
+
+    vector<vector<double>> data_train = dataProcess("data/x_train.csv");
+    vector<int> labels_train = labelProcess("data/y_train.csv"); 
+
+    cout << "data" << "\n";
+    cout << "length " <<  data_train.size() << "\n";
+    for (double e : data_train[0]) {
+        cout << e << " ";
+    }
+
+    cout << "labels" << "\n";
+    cout << "length " << labels_train.size() << "\n";
+
+
+    return 0; 
+}

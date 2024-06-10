@@ -24,7 +24,7 @@ vector<vector<double>> dataProcess(string f);
     */
 
 
-vector<int> labelProcess(string f);
+vector<double> labelProcess(string f);
     /*
         Input : string - file name of data labels
         Output : Vector labels where labels[i] is the integer represented by the image i 

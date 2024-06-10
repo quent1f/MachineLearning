@@ -31,16 +31,16 @@ vector<vector<double>> dataProcess(string f) {
     return data;
 }
 
-vector<int> labelProcess(string f) {
+vector<double> labelProcess(string f) {
     /*
         Input : string - file name of data labels
         Output : Vector labels where labels[i] is the integer represented by the image i 
     */
     std::ifstream file(f); 
     string line; 
-    vector<int> labels;
+    vector<double> labels;
     while(std::getline(file, line)) {
-        int x = std::stoi(line);
+        double x = std::stoi(line);
         labels.push_back(x);
     }
     file.close(); 

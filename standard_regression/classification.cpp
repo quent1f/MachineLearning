@@ -1,29 +1,50 @@
 #include "classification.h"
 
-// Implementing logistic regression 
+// Implementing logistic regression  or ReLU
 
 double sigmoid(double x) {
     return 1/(1+exp(-x));
 }
 
 VectorXd sigmoid_vec(VectorXd &vec) {
-    int size = vec.size();
-    VectorXd res(size);
-    for (int i=0; i < size; i++) {
-        res[i] = 1/(1+exp(-(vec[i])));
-    }
-    return res;
+    return 1/(1 + (-vec.array()).exp());
 }
+
+double reLU(double x) {
+   return x < 0 ? 0 : x; 
+}
+
+VectorXd reLU_vec(VectorXd &vec) {
+    return vec.cwiseMax(0); 
+}
+
 
 // Trying 1 layer neural network 
 
-VectorXd prediction(MatrixXd &weights, VectorXd bias, vector<double> &image) {
+VectorXd predVector(MatrixXd &weights, VectorXd &bias, vector<double> &image) {
     VectorXd image_conv = Eigen::Map<VectorXd>(image.data(), image.size());
     VectorXd result = weights*image_conv + bias;
     return sigmoid_vec(result);
 }
 
+double getMaxIndex(VectorXd pred) {
+    int max_index=0; 
+    double max = pred[0];
+    for (int i=0; i<pred.size(); i++) {
+        if (pred[i] > max) {
+            max = pred[i];
+            max_index = i;
+        }
+    }
+    return (double)max_index;
+}
+
+double prediction(MatrixXd &weights, VectorXd &bias, vector<double> &image) {
+    return getMaxIndex(predVector(weights, bias, image));
+}
+
 double cost(VectorXd prediction, double result) {
+    // Cost function is quadratic loss
     double cost = 0;
     for (int i=0; i < 10; i++) {
         if (i == result) {
@@ -36,40 +57,36 @@ double cost(VectorXd prediction, double result) {
     return cost;
 }
 
-double totalCost(MatrixXd &weights, vector<vector<double>> &data, vector<double> &labels) {
+double totalCost(MatrixXd &weights, VectorXd bias, vector<vector<double>> &data, vector<double> &labels) {
     int n = data.size();
     double res = 0;
     for (int i=0; i < n; i++) {
-        VectorXd pred = prediction(weights, data[i]);
+        VectorXd pred = predVector(weights, bias, data[i]);
         res += cost(pred, labels[i]);
     }
     return res;
 }
 
+    
+// Training Neural Network : Backpropagation
 
 
 
 
 
-// Prochaine étape : définir update_weights : comment on actualise les poids ? 
-
-/* 
-Réseau de neurones à 1 couche : entrée image -> sortie chiffre entre 0 et 9 
-On a 784*10 + 10 paramètre 
-Ne pas oublier le biais
-sigmoid(WX + b)
-
-faire une fonction qui s'entraine à partir des données 
-faire une fonction qui teste 
-Affichage meilleur 
 
 
-Idée : algo génétique pour trouver minimiser le cout 
+// Testing Neural Network 
 
-- generer des weights aléatoires 
-- mesurer le cout 
-- garder les meilleurs 
-- merge le tout 
-- réiterer 
+double hitRate(MatrixXd &weights, VectorXd bias, vector<vector<double>> &testSet, vector<double> &testLabels) {
+    int n = testLabels.size();      // dataSet size
+    int c = 0;                      // count the good predictions
+    for (int i=0; i<n; i++) {
+        if (prediction(weights, bias, testSet[i]) == testLabels[i]) {
+            c++; 
+        }
+    }
+    cout << "On the test set of size " << n << ", the model had " << c << "good answers. Accuracy : " << c/n << "\n";
+    return c/n;
+}   
 
-*/

@@ -1,31 +1,30 @@
 #include "data_processing.h"
 #include "classification.h"
-#include "genetic_algorithm.h"
 
 int main() {
 
-    // vector<vector<double>> data_train = dataProcess("data/x_train.csv");
-    // vector<double> labels_train = labelProcess("data/y_train.csv"); 
+    // Loading data set
+    vector<vector<double>> trainSetImages = dataProcess("data/x_train.csv");
+    vector<double> trainSetLabels = labelProcess("data/y_train.csv");
 
-    // cout << "data" << "\n";
-    // cout << "length " <<  data_train.size() << "\n";
-    // for (double e : data_train[0]) {
-    //     cout << e << " ";
-    // }
+    cout << "Size of tranning dataset : " << trainSetLabels.size() <<  "\n";
 
-    // cout << "labels" << "\n";
-    // cout << "length " << labels_train.size() << "\n";
+    // Training the model
 
-    // cout << sigmoid(1) << std::endl;
+    // MatrixXd weights = trainModel(trainSetImages, trainSetLabels);
 
-    // VectorXd vec(10);
-    // vec << 0,1,2,3,4,5,6,7,8,9;
-    // int result = 1;
-    // cout << cost(vec, result) << "\n";
 
-    MatrixXd weights = testing(1000);
-    
-    cout << weights << "\n";
+
+
+
+    // Testing the model 
+
+    vector<vector<double>> testSetImages = dataProcess("data/x_test.csv");
+    vector<double> testSetLabels = labelProcess("data/y_test.csv");
+
+    cout << "Size of testing dataset : " << testSetLabels.size() << "\n";
+
+    // double rate = hitRate(weights, bias, testSetImages, testSetLabels);
 
     return 0; 
 }

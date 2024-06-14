@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+            "name": "Win32", 
+            "includePath": [
+                "${workspaceFolder}/**",
+                "C:/Users/Quentin F/Documents/MachineLearning/eigen-3.4.0"  
+            ],
+            "defines": [],
+            "compilerPath": "C:/msys64/mingw64/bin/gcc.exe", 
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64"  
+        }
+    ],
+    "version": 4
+}

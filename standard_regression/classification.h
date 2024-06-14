@@ -17,8 +17,11 @@ VectorXd prediction(MatrixXd &weights, vector<double> &image);
 
 double cost(VectorXd prediction, double result);
 
+double totalCost(MatrixXd &weights, vector<vector<double>> &data, vector<double> &label);
 
+MatrixXd generateRandomWeights(int rows, int cols);
 
+VectorXd generateRandomBias(int rows);
 
 
 

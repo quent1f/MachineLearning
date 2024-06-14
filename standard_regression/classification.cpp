@@ -10,17 +10,17 @@ VectorXd sigmoid_vec(VectorXd &vec) {
     int size = vec.size();
     VectorXd res(size);
     for (int i=0; i < size; i++) {
-        res[i] = sigmoid(vec[i]);
+        res[i] = 1/(1+exp(-(vec[i])));
     }
     return res;
 }
 
 // Trying 1 layer neural network 
 
-VectorXd prediction(MatrixXd &weights, vector<double> &image) {
+VectorXd prediction(MatrixXd &weights, VectorXd bias, vector<double> &image) {
     VectorXd image_conv = Eigen::Map<VectorXd>(image.data(), image.size());
-    VectorXd result = weights*image_conv;
-    return result;
+    VectorXd result = weights*image_conv + bias;
+    return sigmoid_vec(result);
 }
 
 double cost(VectorXd prediction, double result) {
@@ -36,6 +36,21 @@ double cost(VectorXd prediction, double result) {
     return cost;
 }
 
+double totalCost(MatrixXd &weights, vector<vector<double>> &data, vector<double> &labels) {
+    int n = data.size();
+    double res = 0;
+    for (int i=0; i < n; i++) {
+        VectorXd pred = prediction(weights, data[i]);
+        res += cost(pred, labels[i]);
+    }
+    return res;
+}
+
+
+
+
+
+
 // Prochaine étape : définir update_weights : comment on actualise les poids ? 
 
 /* 
@@ -47,4 +62,14 @@ sigmoid(WX + b)
 faire une fonction qui s'entraine à partir des données 
 faire une fonction qui teste 
 Affichage meilleur 
+
+
+Idée : algo génétique pour trouver minimiser le cout 
+
+- generer des weights aléatoires 
+- mesurer le cout 
+- garder les meilleurs 
+- merge le tout 
+- réiterer 
+
 */

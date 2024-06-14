@@ -1,6 +1,6 @@
 #include "data_processing.h"
 #include "classification.h"
-
+#include "genetic_algorithm.h"
 
 int main() {
 
@@ -22,6 +22,10 @@ int main() {
     // vec << 0,1,2,3,4,5,6,7,8,9;
     // int result = 1;
     // cout << cost(vec, result) << "\n";
+
+    MatrixXd weights = testing(1000);
+    
+    cout << weights << "\n";
 
     return 0; 
 }

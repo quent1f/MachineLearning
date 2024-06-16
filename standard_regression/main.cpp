@@ -1,5 +1,5 @@
-#include "data_processing.h"
-#include "classification.h"
+#include "data_processing.hpp"
+#include "classification.hpp"
 
 int main() {
 
@@ -11,10 +11,10 @@ int main() {
 
     // Training the model
 
-    // MatrixXd weights = trainModel(trainSetImages, trainSetLabels);
+    MatrixXd weights = initWeights(1.0, 10, 784);
+    VectorXd bias = initBias(1.0, 10);
 
-
-
+    trainModel(weights, bias, trainSetImages, trainSetLabels, 0.05, 500, 10000);
 
 
     // Testing the model 
@@ -22,9 +22,7 @@ int main() {
     vector<vector<double>> testSetImages = dataProcess("data/x_test.csv");
     vector<double> testSetLabels = labelProcess("data/y_test.csv");
 
-    cout << "Size of testing dataset : " << testSetLabels.size() << "\n";
-
-    // double rate = hitRate(weights, bias, testSetImages, testSetLabels);
+    hitRate(weights, bias, testSetImages, testSetLabels);
 
     return 0; 
 }

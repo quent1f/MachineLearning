@@ -1,4 +1,4 @@
-#include "data_processing.h"
+#include "data_processing.hpp"
 
 // Processing data from a CSV file 
 
@@ -46,3 +46,4 @@ vector<double> labelProcess(string f) {
     file.close(); 
     return labels;
 }
+

@@ -6,7 +6,7 @@
                 "${workspaceFolder}/**",
                 "/usr/include",
                 "/usr/local/include",
-                "/home/quentin/Documents/MachineLearnng/eigen-3.4.0"  
+                "/home/quentin/Documents/eigen-3.4.0"  
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

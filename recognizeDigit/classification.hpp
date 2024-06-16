@@ -16,6 +16,8 @@ double sigmoid(double x); // sigmoid function
 
 VectorXd sigmoidVec(VectorXd &vec); // applying sigmoid function to every component of the vector 
 
+VectorXd sigmoidVec2(VectorXd &vec);
+
 double sigmoid_prime(double x); // sigmoid derivative 
 
 double reLU(double x);
@@ -32,7 +34,7 @@ double prediction(MatrixXd &weights, VectorXd &bias, vector<double> &image);
 
 double cost(VectorXd prediction, double result);
 
-double totalCost(MatrixXd &weights, vector<vector<double>> &data, vector<double> &label);
+double totalCost(MatrixXd &weights, VectorXd bias, vector<vector<double>> &data, vector<double> &labels);
 
 // training NN 
 

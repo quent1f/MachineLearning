@@ -14,7 +14,9 @@ int main() {
     MatrixXd weights = initWeights(1.0, 10, 784);
     VectorXd bias = initBias(1.0, 10);
 
-    trainModel(weights, bias, trainSetImages, trainSetLabels, 0.05, 500, 10000);
+    cout << "total cost before training :" << totalCost(weights, bias, trainSetImages, trainSetLabels) << "\n";
+
+    trainModel(weights, bias, trainSetImages, trainSetLabels, 0.15, 100, 10000);
 
 
     // Testing the model 
@@ -23,6 +25,15 @@ int main() {
     vector<double> testSetLabels = labelProcess("data/y_test.csv");
 
     hitRate(weights, bias, testSetImages, testSetLabels);
+    cout << "\n";
+
+    VectorXd image = Map<VectorXd>(testSetImages[0].data(), 784);
+    
+    cout << predVector(weights, bias, testSetImages[0]) << "\n";
+
+    cout << "total cost after training :" << totalCost(weights, bias, trainSetImages, trainSetLabels) << "\n";
+
+
 
     return 0; 
 }

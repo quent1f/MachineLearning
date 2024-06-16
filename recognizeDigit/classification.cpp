@@ -36,7 +36,7 @@ double heaviside(double x ) {
 // Trying 1 layer neural network 
 
 VectorXd predVector(MatrixXd &weights, VectorXd &bias, vector<double> &image) {
-    VectorXd image_conv = Eigen::Map<VectorXd>(image.data(), image.size());
+    VectorXd image_conv = Map<VectorXd>(image.data(), image.size());
     VectorXd result = weights*image_conv + bias;
     return sigmoidVec(result);
 }
@@ -54,8 +54,8 @@ double getMaxIndex(VectorXd pred) {
 }
 
 VectorXd labelToVec(double label) {
-    VectorXd result(10); 
-    result[label] = 1;
+    VectorXd result = VectorXd::Zero(10); 
+    result[(int)label] = 1;
     return result;
 }
 
@@ -63,18 +63,9 @@ double prediction(MatrixXd &weights, VectorXd &bias, vector<double> &image) {
     return getMaxIndex(predVector(weights, bias, image));
 }
 
-double cost(VectorXd prediction, double result) {
+double cost(VectorXd pred, double result) {
     // Cost function is quadratic loss
-    double cost = 0;
-    for (int i=0; i < 10; i++) {
-        if (i == result) {
-            cost += (prediction[i]-1)*(prediction[i]-1);
-        }
-        else {
-            cost += prediction[i]*prediction[i];
-        }
-    }
-    return cost;
+    return (pred-labelToVec(result)).squaredNorm();
 }
 
 double totalCost(MatrixXd &weights, VectorXd bias, vector<vector<double>> &data, vector<double> &labels) {
@@ -84,7 +75,7 @@ double totalCost(MatrixXd &weights, VectorXd bias, vector<vector<double>> &data,
         VectorXd pred = predVector(weights, bias, data[i]);
         res += cost(pred, labels[i]);
     }
-    return res;
+    return res/n;
 }
 
 
@@ -123,10 +114,16 @@ void updateWeightsAndBias(MatrixXd &weights, VectorXd &bias, double lrate, vecto
     for (int i=0; i<s; i++) {
         int rd_int = dis(gen);
         VectorXd z = weights*images[rd_int] + bias;              // compute z = Wa + b where W are weights, a the input, b bias 
-        double temp = sigmoid(z[labels[rd_int]]);                // compute scalar product : <sigmoid(z), y> where y is the vector with the right prediction (0 everywhere except 1 in the right digit)
+        VectorXd temp = sigmoidVec(z);                           // compute scalar product : <sigmoid(z), y> where y is the vector with the right prediction (0 everywhere except 1 in the right digit)
         int layer_size = z.size();                               // should be 10 in our exemple
         for (int j=0; j<layer_size; j++) {
-            double temp2 = (2*lrate*sigmoid_prime(z(j))*temp)/s;
+            double temp2;
+            if (j == labels[rd_int]) {
+                temp2 = (2*lrate*sigmoid_prime(z(j))*(temp(j)-1))/s;
+            }
+            else {
+                temp2 = (2*lrate*sigmoid_prime(z(j))*temp(j))/s;
+            }
             bias(j) -= temp2;                                    // update bias(j)
             for (int k=0; k<784; k++) {
                 weights(j,k) -= images[rd_int](k)*temp2;         // update weights(j,k)
